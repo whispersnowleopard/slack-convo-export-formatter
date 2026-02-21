@@ -1,0 +1,111 @@
+---
+subject: 
+source: Slack
+type: channel
+channel: jet-help
+when: 2026-02-19
+context: 
+
+participants:
+  - name: Albert Margarit
+    mention: @albmarga
+    title: 
+    org: 
+    note: 
+    profile_url: 
+
+  - name: Dave Gilbert
+    title: 
+    org: 
+    note: 
+    profile_url: 
+
+  - name: John 'JB' Brock [JET, US-WEST]
+    title: 
+    org: 
+    note: 
+    profile_url: 
+---
+
+
+# [Subject - fill in]
+
+**Type:** channel • **Channel:** jet-help  
+**When:** 2026-02-19  
+**Participants:** Albert Margarit, Dave Gilbert, John 'JB' Brock [JET, US-WEST]  
+**Context:** [fill in]
+
+---
+
+**Dave Gilbert** *[4:23 PM Feb 12, 2026]*
+
+I am working to identify options for server-side access to the JET library from outside of APEX.  So far I believe my best option is to self-host on OCI.  Can anyone confirm?
+
+**John 'JB' Brock [JET, US-WEST]** *[4:30 PM]*
+
+Hi Dave,
+Not quite sure what you are looking for here.  What do you need server-side access to the JET libraries for?
+Can you explain your use case in a little more detail please? :slightly_smiling_face:
+
+**Dave Gilbert** *[4:39 PM]*
+
+Hi John!  Thanks for getting back to me.  I’m in Channel for NetSuite GBU. I am developing a custom solution for JET charts on NetSuite dashboards (in our Partner portal).   It’s a dash portlet script in SuiteScript, which is basically JS.  The script needs persistent, secured, and stable access to the full JET library.  I’m trying out different ways of making that (or an equivalent) happen, and it’s been pretty challenging.
+Self-hosting I think will tick all of the key boxes i.e. for our security & infrastructure people.
+
+**John 'JB' Brock [JET, US-WEST]** *[4:40 PM]*
+
+All JET libraries are available on CDN.
+on Oracle CDN
+
+**Dave Gilbert** *[4:50 PM]*
+
+yes; my challenge with that is it appears to violate some of the security principles in place within the BU.  I am speculating a bit here but have strong reason to believe these things are problematic:
+a. “outside” code being executed within an instance of the application.  I’m hoping to mitigate by using an Internal Oracle source.  or at least my mock-up of an internal source for POC purposes.  at some point, I know we’re going to have access internally but it’s not clear when that’s going to happen.  I was expecting we’d have an internal CDN I could use but it appears not.
+b. use of “uncontrolled” sources.  they will not like a Public CDN.  what happens if someone hacks it?  if the files on our chosen endpoints are updated without us having a chance to test first? how can we audit or validate?
+It is not my place to challenge the validity of any of this. I just need to do the best I can to anticipate what are the objections are going to be and proactively eliminate them.
+
+**John 'JB' Brock [JET, US-WEST]** *[4:53 PM]*
+
+The Oracle CDN is run by Akamai and about as secure as any CDN is going to be.  It is managed by OCI.  I would argue that placing something on your own on a OCI service would be less secure.
+Have you spoken to @albmarga and his team on the NSX architecture group?  They would know more about the specific NetSuite environments and requirements.  They may have already put JET into a NetSuite CDN if that exists. (edited)
+
+**Dave Gilbert** *[4:55 PM]*
+
+that makes a lot of sense to me.  And I can add it to my talk track for when people start to question the validity of the approach.
+
+**John 'JB' Brock [JET, US-WEST]** *[4:56 PM]*
+
+The entire Fusion Applications product suite is using the Oracle CDN.  If they had an issue with security I'm sure it would have come up already as well.
+Not to say that we don't have the requirement for offline secure networks.  Those are definitely something that exists, but they are using local instances of everything behind secure firewalls that don't connect to the Internet at all.
+
+**Dave Gilbert** *[5:00 PM]*
+
+as a point of reference, I would point to Highcharts.  NSGBU has a current license for the core charting library. but we’re using an ancient version.
+I will take “contacting the NSX architecture group” for my action.  It would be better if I could approach someone lower than a VP but if necessary I can ask my VP to make the connection…. he wants modern charts on NetSuite dashboards today
+and I have it working!  with Chart.js, Highcharts, AND JET.
+I’m using minified chart libraries hosted in the application’s “file cabinet” to drive chartjs and Highcharts dash portlets. However so far I have not been able to replicate that with a locally constructed JET bundle.  I’m actually using the CDN for now.  I have been assuming I would need to find an alternative in order for this approach to be taken seriously.
+but you raise some great counter-arguments!
+
+**Dave Gilbert** *[5:28 PM]*
+
+anyway, thanks a ton for the help!
+
+**Albert Margarit** *[12:30 AM]*
+
+Hey Dave, I'd suggest talking to @mkapusni and his team. We are not yet supporting JET for SuiteCloud extensions, but there are good options with NetSuite UIF and Highcharts.
+
+**Dave Gilbert** *[12:35 AM]*
+
+oh wow thanks a lot!  I will follow with him right now.  once we are supporting JET for use by customizations, is it safe to assume it will be via api call?
+
+**Albert Margarit** *[12:40 AM]*
+
+Not sure what you mean by API call. I think the idea will be that SuiteCloud will take care of hosting and instantiating a specific version of JET,  developers won't need to worry about that part. You'll have some modules available to import into your scripts that will bring JET components to your Portlet script.
+
+**Dave Gilbert** *[12:52 AM]*
+
+that’s very helpful!  thank you!!!
+
+**John 'JB' Brock [JET, US-WEST]** *[8:32 AM]*
+
+Thank you @albmarga!
